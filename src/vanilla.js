@@ -35,7 +35,23 @@
     //2: What if we want the user to be able to pass multiple classes in a single parameter?
     //3: What if we want the user to be able to do both 1 and 2 above?
     $v.fn.addClass = function(classString) {
-        //add class logic here
+
+        // iterate through arguments lists
+        var classes = [];
+
+        for (var i = 0, total = arguments.length; i < total; i++) {
+            classes.push(arguments[i]);
+        }
+
+        // iterate through this.elements
+        this.elements.forEach(function(element, index, array) {
+            classes.forEach(function(classString) {
+                if (!(this.hasClass(classString, element))) {
+                    // add class to element's class property
+                    array[index].className += ' ' + classString;
+                }
+            }, this);
+        }, this);
 
         //return reference to `$v` for method chaining
         return this;
@@ -55,4 +71,27 @@
     //3: What if we want the user to be able to do both 1 and 2 above?
     $v.fn.toggleClass = function(classString) {
         //toggle class logic here
+    };
+
+    //check to see if element has given class
+    $v.fn.hasClass = function(classString, element) {
+        //if an element was passed to the method
+        if(element) {
+            //if this class exists in the element's className property
+            if(element.className.indexOf(classString) !== -1) {
+                return true;
+            }
+
+            //by default, let's assume it doesn't
+            return false;
+        }
+
+        //if no element parameter was passed to the method
+        //use the first item in our collection
+        if(this.elements[0].className.indexOf(classString) !== -1) {
+            return true;
+        }
+
+        //again, let's assume this doesn't have the class
+        return false;
     };

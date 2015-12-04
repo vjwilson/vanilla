@@ -1,1 +1,1 @@
-$v('.testing-p').addClass('green-text');
+$v('.testing-p').addClass('green-text', 'red-text', 'blue-text');
